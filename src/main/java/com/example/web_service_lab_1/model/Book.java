@@ -15,6 +15,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotBlank
+    @Max(100)
     private String title;
     @NotBlank
     private String content;
