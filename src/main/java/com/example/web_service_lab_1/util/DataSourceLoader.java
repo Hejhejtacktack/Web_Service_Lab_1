@@ -1,14 +1,11 @@
 package com.example.web_service_lab_1.util;
 
-import com.example.web_service_lab_1.model.Book;
-import com.example.web_service_lab_1.repository.BookRepository;
+import com.example.web_service_lab_1.db.BookEntity;
+import com.example.web_service_lab_1.db.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 
 @Component
@@ -21,11 +18,11 @@ public class DataSourceLoader implements CommandLineRunner {
     }
 
     public void load() {
-        Book book1 = new Book("Life in a bath house", "Once upon a time...", 1987);
-        Book book2 = new Book("Pepsi Max secrets", "Once upon a time...", 1932);
-        Book book3 = new Book("You've got nail", "Once upon a time...", 1876);
+        BookEntity bookEntity1 = new BookEntity("Life in a bath house", "Once upon a time...", 1987);
+        BookEntity bookEntity2 = new BookEntity("Pepsi Max secrets", "Once upon a time...", 1932);
+        BookEntity bookEntity3 = new BookEntity("You've got nail", "Once upon a time...", 1876);
 
-        this.bookRepository.saveAll(Arrays.asList(book1, book2, book3));
+        this.bookRepository.saveAll(Arrays.asList(bookEntity1, bookEntity2, bookEntity3));
     }
 
     @Override
