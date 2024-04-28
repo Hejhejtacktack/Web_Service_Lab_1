@@ -23,8 +23,12 @@ public class BookService {
         this.bookRepository.delete(book);
     }
 
-    public void update(Book book) {
-
+    public void update(Long id, Book newBook) {
+        Book book = this.getById(id);
+        book.setTitle(newBook.getTitle());
+        book.setContent(newBook.getContent());
+        book.setPublishYear(newBook.getPublishYear());
+        this.bookRepository.save(book);
     }
 
     public Book getById(Long id) {
