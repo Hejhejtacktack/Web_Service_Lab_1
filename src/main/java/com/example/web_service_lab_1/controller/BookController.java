@@ -10,8 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/rs")
+@RequestMapping("/api")
 public class BookController {
 
     private final BookService bookService;
@@ -21,41 +23,27 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @GetMapping("/book/id/{id}")
+    @GetMapping("/books/")
+    public ResponseEntity<List<Book>> getAllBooks() {
+        return new ResponseEntity<>(this.bookService.getAllBooks(), HttpStatus.OK);
+    }
+
+    @GetMapping("/books/{id}")
     public ResponseEntity<Book> getBookById(@PathVariable("id") Long id) {
-        try {
-            return new ResponseEntity<>(this.bookService.getById(id), HttpStatus.OK);
-        } catch (BookNotFoundException bNFE) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(this.bookService.getById(id), HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/book/title/{title}")
-    public ResponseEntity<Book> getBookByTitle(@PathVariable("title") String title,
-                                               BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-        } else {
-            try {
-                return new ResponseEntity<>(this.bookService.getByTitle(title), HttpStatus.OK);
-            } catch (BookNotFoundException bNFE) {
-                return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
-            }
-        }
-    }
-
-    @PostMapping("/book/new")
+    @PostMapping("/books/new")
     public ResponseEntity<Book> create(@RequestBody @Valid Book book,
                                           BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity<>(book, HttpStatus.BAD_REQUEST);
         } else {
-            this.bookService.create(book);
-            return new ResponseEntity<>(book, HttpStatus.CREATED);
+            return new ResponseEntity<>(this.bookService.create(book), HttpStatus.CREATED);
         }
     }
 
-    @PutMapping("/book/{id}")
+    @PutMapping("/books/{id}")
     public ResponseEntity<Book> replace(@PathVariable Long id,
                                         @RequestBody @Valid Book book,
                                         BindingResult bindingResult) {
@@ -67,14 +55,8 @@ public class BookController {
         }
     }
 
-    @DeleteMapping("/book/delete")
-    public ResponseEntity<Book> delete(@RequestBody @Valid Book book,
-                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(book, HttpStatus.BAD_REQUEST);
-        } else {
-            this.bookService.delete(book);
-            return new ResponseEntity<>(book, HttpStatus.OK);
-        }
+    @DeleteMapping("/books/{id}")
+    public ResponseEntity<Book> delete(@PathVariable("id") Long id) {
+        return new ResponseEntity<>(this.bookService.delete(id), HttpStatus.OK);
     }
 }
